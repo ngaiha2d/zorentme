@@ -1,44 +1,50 @@
 <script setup>
+import { onMounted } from 'vue';
 import { useAuthStore } from '../stores/auth';
 
 const  authStore = useAuthStore();
+if(authStore.user){
 
+onMounted(async ()=>{
+    await authStore.getUser();
+});
+}
 </script>
+
+
 <template>
-<nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600">
+<nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600 ">
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
   <a href="#" class="flex items-center">
-      
-      <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Zorentme</span>
+    <router-link :to="{name :'Home'}" class=" rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page"><span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Zorentme</span></router-link>
   </a>
-  <div class="flex md:order-2">
-      <button data-collapse-toggle="navbar-sticky" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-sticky" aria-expanded="false">
-        <span class="sr-only">Open main menu</span>
-        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
-        </svg>
-    </button>
-  </div>
-  <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-2" id="navbar-sticky">
-    <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-      <li>
-        <router-link :to="{name :'Home'}" class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page">Home</router-link>
-      </li>
+  
+
+    <ul :class="'flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700'">
       <template v-if="!authStore.user">
         <li>
         <router-link :to="{name:'Login'}" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Login</router-link>
       </li>
-      <li>
+      <!-- <li>
         <router-link :to="{name:'Register'}" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Register</router-link>
-      </li>
+      </li> -->
+      
+      </template>
+      
+      <template v-else-if="authStore.user.is_vendor == 1">
+        <p style="color: aliceblue;">{{ authStore.user.name }}</p>
+        <router-link :to="{name:'VendorDashboard'}" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Vendor Dashboard</router-link>
+        <p class="point hover" style="color: aliceblue;" @click="authStore.handleLogout" >Logout</p>
+        
       </template>
       <template v-else>
-        <button @click="authStore.handleLogout" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Logout</button>
+        <p  style="color: aliceblue;">{{ authStore.user.name }}</p>
+        <router-link :to="{name:'VendorRegistration'}" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Register as Vendor</router-link>
+        <button @click="authStore.handleLogout" >Logout</button> 
       </template>
-
     </ul>
   </div>
-  </div>
+
 </nav>
 
 </template>
@@ -48,6 +54,12 @@ nav li:hover,
 nav li:active {
 
   cursor: pointer;
+}
+.point{
+  cursor: pointer;
+}
+.point:hover {
+  color: blue;
 }
 </style>
 

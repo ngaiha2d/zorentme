@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Dboperation;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,6 +19,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Route::group(['prefix' =>'bdoperation'],function(){
-//    Route::apiResou 
-// });
+Route::group([''],function(){
+    Route::apiResource('crud',Dboperation::class);
+});
+
