@@ -38,4 +38,12 @@ class RegisteredUserController extends Controller
 
         return response()->noContent();
     }
+
+    public function RegisterVendor(Request $request):Response
+    {
+        User::where('id',$request->id)->update([
+            'is_vendor' => 1
+        ]);
+        return response()->noContent();
+    }
 }
